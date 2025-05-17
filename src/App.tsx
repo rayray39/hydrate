@@ -18,9 +18,15 @@ function App() {
             height:'100vh',
         }}>
             <Box style={{
+                fontWeight:'bold',
+                fontSize: 24,
+                letterSpacing: 2
+            }}>{"HYDRATE"}</Box>
+            <Box style={{
                 display:'flex',
                 justifyContent:'center',
                 alignItems:'center',
+                marginTop: 40
             }}>
                 <VerticalSlider icon='💧' label='water' />
                 <Space w="xl"/>
