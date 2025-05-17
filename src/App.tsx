@@ -5,22 +5,32 @@ import VerticalSlider from './vertical-slider';
 
 function App() {
     return <MantineProvider
-        theme={{
-        fontFamily: 'Ubuntu Mono, monospace',
-        headings: { fontFamily: 'Ubuntu Mono, monospace' },
+            theme={{
+            fontFamily: 'Ubuntu Mono, monospace',
+            headings: { fontFamily: 'Ubuntu Mono, monospace' },
         }}
     >
         <Box style={{
             display:'flex',
+            flexDirection:'column',
             justifyContent:'center',
             alignItems:'center',
             height:'100vh',
         }}>
-            <VerticalSlider icon='💧' label='water' />
-            <Space w="xl"/>
-            <VerticalSlider icon='☕️' label='coffee' />
-            <Space w="xl"/>
-            <VerticalSlider icon='🍵' label='tea' />
+            <Box style={{
+                display:'flex',
+                justifyContent:'center',
+                alignItems:'center',
+            }}>
+                <VerticalSlider icon='💧' label='water' />
+                <Space w="xl"/>
+                <VerticalSlider icon='☕️' label='coffee' />
+                <Space w="xl"/>
+                <VerticalSlider icon='🍵' label='tea' />
+            </Box>
+            <Box>
+                {'* 1 cup is ≈ 0.2 litres'}
+            </Box>
         </Box>
     </MantineProvider>
 }
