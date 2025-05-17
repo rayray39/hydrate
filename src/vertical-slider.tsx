@@ -2,12 +2,12 @@ import { useState } from 'react';
 import { Box, Group, Text } from '@mantine/core';
 import { useMove } from '@mantine/hooks';
 
-const SLIDER_WIDTH = 60;
+const SLIDER_WIDTH = 100;
 const SLIDER_HEIGHT = 360;
 const THUMB_HEIGHT = 8;
 const SLIDER_BORDER_RADIUS = '4px';
 
-function VerticalSlider() {
+function VerticalSlider({ icon, label }:{ icon:string, label:string}) {
     const [value, setValue] = useState(0.2);
     const { ref } = useMove(({ y }) => setValue(1 - y));
 
@@ -38,7 +38,7 @@ function VerticalSlider() {
                             top: 10,
                         }}
                         className='vert-slider-icon'
-                    >{"💧"}</div>
+                    >{icon}</div>
                     {/* Label */}
                     <div
                         style={{
@@ -48,7 +48,7 @@ function VerticalSlider() {
                             textAlign:'center'
                         }}
                         className='vert-slider-label'
-                    >{"water"}</div>
+                    >{label}</div>
 
                     {/* Filled bar */}
                     <div
