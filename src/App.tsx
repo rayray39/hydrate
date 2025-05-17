@@ -4,6 +4,15 @@ import './App.css'
 import VerticalSlider from './vertical-slider';
 
 function App() {
+    
+    const handleRecord = () => {
+        console.log('record button clicked.');
+    }
+
+    const handleAnalyze = () => {
+        console.log('analyze button clicked.');
+    }
+
     return <MantineProvider
             theme={{
             fontFamily: 'Ubuntu Mono, monospace',
@@ -41,8 +50,8 @@ function App() {
             </Box>
 
             <Group style={{ marginTop: 40 }}>
-                <Button variant="default" size='md' >Record</Button>
-                <Button variant="default" size='md' >Analyze</Button>
+                <Button variant="default" size='md' onClick={handleRecord} >Record</Button>
+                <Button variant="default" size='md' onClick={handleAnalyze} >Analyze</Button>
             </Group>
         </Box>
     </MantineProvider>
