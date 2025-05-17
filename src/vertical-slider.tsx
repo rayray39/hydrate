@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { Box, Group, Text } from '@mantine/core';
 import { useMove } from '@mantine/hooks';
+import { sliderColors } from './slider-colors';
+import type { SliderLabel } from './slider-labels';
 
 const SLIDER_WIDTH = 100;
 const SLIDER_HEIGHT = 360;
@@ -9,7 +11,9 @@ const SLIDER_BORDER_RADIUS = '4px';
 const ICON_DISTANCE_FROM_TOP = 10;
 const LABEL_DISTANCE_FROM_TOP = 36;
 
-function VerticalSlider({ icon, label }:{ icon:string, label:string}) {
+function VerticalSlider({ icon, label }:{ icon:string, label:SliderLabel}) {
+    const { fill, track, thumb } = sliderColors[label] ?? sliderColors.default;
+
     const [value, setValue] = useState(1);
     const sliderMin = 0;
     const sliderMax = 5;
@@ -42,7 +46,7 @@ function VerticalSlider({ icon, label }:{ icon:string, label:string}) {
                     style={{
                         width: SLIDER_WIDTH,
                         height: SLIDER_HEIGHT,
-                        backgroundColor: 'var(--mantine-color-blue-light)',
+                        backgroundColor: track,
                         position: 'relative',
                         borderRadius: SLIDER_BORDER_RADIUS
                     }}
@@ -77,7 +81,7 @@ function VerticalSlider({ icon, label }:{ icon:string, label:string}) {
                             bottom: 0,
                             height: `${noramlizedValue * 100}%`,
                             width: SLIDER_WIDTH,
-                            backgroundColor: 'var(--mantine-color-blue-filled)',
+                            backgroundColor: fill,
                             opacity: 0.7,
                             borderRadius: SLIDER_BORDER_RADIUS
                         }}
@@ -92,7 +96,7 @@ function VerticalSlider({ icon, label }:{ icon:string, label:string}) {
                             left: 0,
                             width: SLIDER_WIDTH,
                             height: THUMB_HEIGHT,
-                            backgroundColor: 'var(--mantine-color-gray-7)',
+                            backgroundColor: thumb,
                             borderRadius: SLIDER_BORDER_RADIUS
                         }}
                     />
