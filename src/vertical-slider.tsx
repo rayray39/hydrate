@@ -2,6 +2,11 @@ import { useState } from 'react';
 import { Box, Group, Text } from '@mantine/core';
 import { useMove } from '@mantine/hooks';
 
+const SLIDER_WIDTH = 60;
+const SLIDER_HEIGHT = 360;
+const THUMB_HEIGHT = 8;
+const SLIDER_BORDER_RADIUS = '4px';
+
 function VerticalSlider() {
     const [value, setValue] = useState(0.2);
     const { ref } = useMove(({ y }) => setValue(1 - y));
@@ -17,11 +22,11 @@ function VerticalSlider() {
                 <div
                     ref={ref}
                     style={{
-                        width: 60,
-                        height: 360,
+                        width: SLIDER_WIDTH,
+                        height: SLIDER_HEIGHT,
                         backgroundColor: 'var(--mantine-color-blue-light)',
                         position: 'relative',
-                        borderRadius:'4px'
+                        borderRadius: SLIDER_BORDER_RADIUS
                     }}
                 >
                 {/* Filled bar */}
@@ -30,10 +35,10 @@ function VerticalSlider() {
                         position: 'absolute',
                         bottom: 0,
                         height: `${value * 100}%`,
-                        width: 60,
+                        width: SLIDER_WIDTH,
                         backgroundColor: 'var(--mantine-color-blue-filled)',
                         opacity: 0.7,
-                        borderRadius:'4px'
+                        borderRadius: SLIDER_BORDER_RADIUS
                     }}
                 />
 
@@ -43,10 +48,10 @@ function VerticalSlider() {
                         position: 'absolute',
                         bottom: `calc(${value * 100}%)`,
                         left: 0,
-                        width: 60,
-                        height: 8,
+                        width: SLIDER_WIDTH,
+                        height: THUMB_HEIGHT,
                         backgroundColor: 'var(--mantine-color-gray-7)',
-                        borderRadius:'4px'
+                        borderRadius: SLIDER_BORDER_RADIUS
                     }}
                 />
                 </div>
