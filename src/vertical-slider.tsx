@@ -13,13 +13,20 @@ function VerticalSlider({ icon, label }:{ icon:string, label:string}) {
     const [value, setValue] = useState(1);
     const sliderMin = 0;
     const sliderMax = 5;
+    const sliderStep = 0.1;
     const noramlizedValue = (value - sliderMin) / (sliderMax - sliderMin);
 
     const { ref } = useMove(({ y }) => {
-        // normalize the value to be withing the range [1,5]
-        const scaled = 1 - y; // y=0 means top, so invert
-        const newValue = sliderMin + scaled * (sliderMax - sliderMin);
-        setValue(Math.round(newValue));
+        // normalize the value to be withing the range [0,5], with step size = 0.1
+        const normalized = 1 - y; // y=0 at top, invert it
+        let scaled = sliderMin + normalized * (sliderMax - sliderMin);
+
+        // Round to nearest 0.1
+        scaled = Math.round(scaled / sliderStep) * sliderStep;
+
+        // Clamp the value to the range
+        scaled = Math.max(sliderMin, Math.min(sliderMax, scaled));
+        setValue(scaled);
     });
 
     return (
@@ -93,7 +100,7 @@ function VerticalSlider({ icon, label }:{ icon:string, label:string}) {
             </Group>
 
             <Text ta="center" mt="sm">
-                {Math.round(value)} litres
+                {value.toFixed(1)} litres
             </Text>
         </Box>
     )
