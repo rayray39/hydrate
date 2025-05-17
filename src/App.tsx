@@ -1,5 +1,5 @@
 import '@mantine/core/styles.css';
-import { Box, MantineProvider } from '@mantine/core';
+import { Box, MantineProvider, Space } from '@mantine/core';
 import './App.css'
 import VerticalSlider from './vertical-slider';
 
@@ -11,7 +11,11 @@ function App() {
             alignItems:'center',
             height:'100vh',
         }}>
-            <VerticalSlider />
+            <VerticalSlider icon='💧' label='water' />
+            <Space w="xl"/>
+            <VerticalSlider icon='☕️' label='coffee' />
+            <Space w="xl"/>
+            <VerticalSlider icon='🍵' label='tea' />
         </Box>
     </MantineProvider>;
 }
