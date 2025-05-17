@@ -1,22 +1,44 @@
 import '@mantine/core/styles.css';
-import { MantineProvider } from '@mantine/core';
-import { Slider } from '@mantine/core';
+import { Box, MantineProvider, Space } from '@mantine/core';
 import './App.css'
+import VerticalSlider from './vertical-slider';
 
 function App() {
-    return <MantineProvider>
-        {'Hello World'}
-
-        <Slider 
-            color="blue"
-            defaultValue={40}
-            marks={[
-                { value: 20, label: '20%' },
-                { value: 50, label: '50%' },
-                { value: 80, label: '80%' },
-            ]}
-        />
-    </MantineProvider>;
+    return <MantineProvider
+            theme={{
+            fontFamily: 'Ubuntu Mono, monospace',
+            headings: { fontFamily: 'Ubuntu Mono, monospace' },
+        }}
+    >
+        <Box style={{
+            display:'flex',
+            flexDirection:'column',
+            justifyContent:'center',
+            alignItems:'center',
+            height:'100vh',
+        }}>
+            <Box style={{
+                fontWeight:'bold',
+                fontSize: 24,
+                letterSpacing: 2
+            }}>{"HYDRATE"}</Box>
+            <Box style={{
+                display:'flex',
+                justifyContent:'center',
+                alignItems:'center',
+                marginTop: 40
+            }}>
+                <VerticalSlider icon='💧' label='water' />
+                <Space w="xl"/>
+                <VerticalSlider icon='☕️' label='coffee' />
+                <Space w="xl"/>
+                <VerticalSlider icon='🍵' label='tea' />
+            </Box>
+            <Box>
+                {'* 1 cup is ≈ 0.2 litres'}
+            </Box>
+        </Box>
+    </MantineProvider>
 }
 
 export default App
