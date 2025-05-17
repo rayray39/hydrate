@@ -6,6 +6,8 @@ const SLIDER_WIDTH = 100;
 const SLIDER_HEIGHT = 360;
 const THUMB_HEIGHT = 8;
 const SLIDER_BORDER_RADIUS = '4px';
+const ICON_DISTANCE_FROM_TOP = 10;
+const LABEL_DISTANCE_FROM_TOP = 36;
 
 function VerticalSlider({ icon, label }:{ icon:string, label:string}) {
     const [value, setValue] = useState(0.2);
@@ -35,7 +37,8 @@ function VerticalSlider({ icon, label }:{ icon:string, label:string}) {
                             position:'absolute',
                             width:'100%',
                             textAlign:'center',
-                            top: 10,
+                            zIndex: 10,
+                            top: ICON_DISTANCE_FROM_TOP,
                         }}
                         className='vert-slider-icon'
                     >{icon}</div>
@@ -44,7 +47,8 @@ function VerticalSlider({ icon, label }:{ icon:string, label:string}) {
                         style={{
                             position:'absolute',
                             width:'100%',
-                            top: 30,
+                            zIndex: 10,
+                            top: LABEL_DISTANCE_FROM_TOP,
                             textAlign:'center'
                         }}
                         className='vert-slider-label'
