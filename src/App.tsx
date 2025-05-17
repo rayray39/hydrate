@@ -4,7 +4,12 @@ import './App.css'
 import VerticalSlider from './vertical-slider';
 
 function App() {
-    return <MantineProvider>
+    return <MantineProvider
+        theme={{
+        fontFamily: 'Ubuntu Mono, monospace',
+        headings: { fontFamily: 'Ubuntu Mono, monospace' },
+        }}
+    >
         <Box style={{
             display:'flex',
             justifyContent:'center',
@@ -17,7 +22,7 @@ function App() {
             <Space w="xl"/>
             <VerticalSlider icon='🍵' label='tea' />
         </Box>
-    </MantineProvider>;
+    </MantineProvider>
 }
 
 export default App
