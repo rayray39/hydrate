@@ -10,8 +10,17 @@ const ICON_DISTANCE_FROM_TOP = 10;
 const LABEL_DISTANCE_FROM_TOP = 36;
 
 function VerticalSlider({ icon, label }:{ icon:string, label:string}) {
-    const [value, setValue] = useState(0.2);
-    const { ref } = useMove(({ y }) => setValue(1 - y));
+    const [value, setValue] = useState(1);
+    const sliderMin = 0;
+    const sliderMax = 5;
+    const noramlizedValue = (value - sliderMin) / (sliderMax - sliderMin);
+
+    const { ref } = useMove(({ y }) => {
+        // normalize the value to be withing the range [1,5]
+        const scaled = 1 - y; // y=0 means top, so invert
+        const newValue = sliderMin + scaled * (sliderMax - sliderMin);
+        setValue(Math.round(newValue));
+    });
 
     return (
         <Box style={{
@@ -59,7 +68,7 @@ function VerticalSlider({ icon, label }:{ icon:string, label:string}) {
                         style={{
                             position: 'absolute',
                             bottom: 0,
-                            height: `${value * 100}%`,
+                            height: `${noramlizedValue * 100}%`,
                             width: SLIDER_WIDTH,
                             backgroundColor: 'var(--mantine-color-blue-filled)',
                             opacity: 0.7,
@@ -71,7 +80,8 @@ function VerticalSlider({ icon, label }:{ icon:string, label:string}) {
                     <div
                         style={{
                             position: 'absolute',
-                            bottom: `calc(${value * 100}%)`,
+                            bottom: `calc(${noramlizedValue * 100}%)`,
+                            // bottom: `calc(${noramlizedValue * 100}%)`,
                             left: 0,
                             width: SLIDER_WIDTH,
                             height: THUMB_HEIGHT,
@@ -83,7 +93,7 @@ function VerticalSlider({ icon, label }:{ icon:string, label:string}) {
             </Group>
 
             <Text ta="center" mt="sm">
-                {Math.round(value * 100)} litres
+                {Math.round(value)} litres
             </Text>
         </Box>
     )
