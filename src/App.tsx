@@ -1,21 +1,18 @@
 import '@mantine/core/styles.css';
-import { MantineProvider } from '@mantine/core';
-import { Slider } from '@mantine/core';
+import { Box, MantineProvider } from '@mantine/core';
 import './App.css'
+import VerticalSlider from './vertical-slider';
 
 function App() {
     return <MantineProvider>
-        {'Hello World'}
-
-        <Slider 
-            color="blue"
-            defaultValue={40}
-            marks={[
-                { value: 20, label: '20%' },
-                { value: 50, label: '50%' },
-                { value: 80, label: '80%' },
-            ]}
-        />
+        <Box style={{
+            display:'flex',
+            justifyContent:'center',
+            alignItems:'center',
+            height:'100vh',
+        }}>
+            <VerticalSlider />
+        </Box>
     </MantineProvider>;
 }
 
