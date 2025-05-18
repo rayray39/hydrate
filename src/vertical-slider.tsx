@@ -41,14 +41,20 @@ function VerticalSlider({ icon, label }:{ icon:string, label:SliderLabel}) {
     });
 
     const handleRecord = () => {
-        // records the amt drank and adds the amt to the running totalAmount, if record button is clicked on
+        // opens the modal to ask user for amount drank confirmation
         open();
         console.log(`recording ${label}, amt = ${value.toFixed(1)} L ...`);
+    }
+
+    const handleConfirm = () => {
+        // records the amt drank and adds the amt to the running totalAmount, if confirm button in modal is clicked on
         setTotalAmount(prev => {
             const newTotal = prev + value;
             console.log(`Updated ${label}, tot amt = ${newTotal.toFixed(1)} L ...`);
             return newTotal;
         });
+        console.log(`successfully recorded ${label}.`);
+        close();
     }
 
     return (
@@ -139,7 +145,7 @@ function VerticalSlider({ icon, label }:{ icon:string, label:SliderLabel}) {
                     <Text>
                     {`You have drank ${value.toFixed(1)} litres of ${label}.`}
                     </Text>
-                    <Button variant='default' mt={10}>Confirm</Button>
+                    <Button variant='default' mt={10} onClick={handleConfirm} >Confirm</Button>
                 </Box>
             </Modal>
         </Box>
