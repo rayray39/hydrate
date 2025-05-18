@@ -4,6 +4,17 @@ import './App.css'
 import VerticalSlider from './vertical-slider';
 
 function App() {
+
+    const getTodayDate = () => {
+        // returns today's date in dd/mm/yyyy
+        const today = new Date();
+        const dd = String(today.getDate()).padStart(2, '0');
+        const mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        const yyyy = today.getFullYear();
+
+        const todayDate = `${dd}/${mm}/${yyyy}`;
+        return todayDate;
+    }
     
     const handleRecord = () => {
         console.log('record button clicked.');
@@ -31,6 +42,10 @@ function App() {
                 fontSize: 24,
                 letterSpacing: 2
             }}>{"HYDRATE"}</Box>
+
+            <Box>
+                {`today: ${getTodayDate()}`}
+            </Box>
 
             <Box style={{
                 display:'flex',
