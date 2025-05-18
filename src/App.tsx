@@ -16,10 +16,6 @@ function App() {
         return todayDate;
     }
     
-    const handleRecord = () => {
-        console.log('record button clicked.');
-    }
-
     const handleAnalyze = () => {
         console.log('analyze button clicked.');
     }
@@ -47,6 +43,10 @@ function App() {
                 {`today: ${getTodayDate()}`}
             </Box>
 
+            <Box>
+                {'* 1 cup is ≈ 0.2 litres'}
+            </Box>
+
             <Box style={{
                 display:'flex',
                 justifyContent:'center',
@@ -60,12 +60,7 @@ function App() {
                 <VerticalSlider icon='🍵' label='tea' />
             </Box>
 
-            <Box>
-                {'* 1 cup is ≈ 0.2 litres'}
-            </Box>
-
             <Group style={{ marginTop: 40 }}>
-                <Button variant="default" size='md' onClick={handleRecord} >Record</Button>
                 <Button variant="default" size='md' onClick={handleAnalyze} >Analyze</Button>
             </Group>
         </Box>

@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { Box, Group, Text } from '@mantine/core';
-import { useMove } from '@mantine/hooks';
+import { Box, Button, Group, Modal, Text } from '@mantine/core';
+import { useDisclosure, useMove } from '@mantine/hooks';
 import { sliderColors } from './slider-colors';
 import type { SliderLabel } from './slider-labels';
 
@@ -14,14 +14,21 @@ const LABEL_DISTANCE_FROM_TOP = 36;
 function VerticalSlider({ icon, label }:{ icon:string, label:SliderLabel}) {
     const { fill, track, thumb } = sliderColors[label] ?? sliderColors.default;
 
-    const [value, setValue] = useState(0.5);
+    // tracks current slider value
+    const [value, setValue] = useState<number>(0);
     const sliderMin = 0;
     const sliderMax = 3;
     const sliderStep = 0.1;
     const noramlizedValue = (value - sliderMin) / (sliderMax - sliderMin);
 
+    // tracks accumulated amount
+    const [totalAmount, setTotalAmount] = useState<number>(0);
+
+    // controls the opening and closing of the modal
+    const [opened, { open, close }] = useDisclosure(false);
+
     const { ref } = useMove(({ y }) => {
-        // normalize the value to be withing the range [0,5], with step size = 0.1
+        // normalize the value to be withing the range [0,3], with step size = 0.1
         const normalized = 1 - y; // y=0 at top, invert it
         let scaled = sliderMin + normalized * (sliderMax - sliderMin);
 
@@ -33,12 +40,32 @@ function VerticalSlider({ icon, label }:{ icon:string, label:SliderLabel}) {
         setValue(scaled);
     });
 
+    const handleRecord = () => {
+        // opens the modal to ask user for amount drank confirmation
+        open();
+        console.log(`recording ${label}, amt = ${value.toFixed(1)} L ...`);
+    }
+
+    const handleConfirm = () => {
+        // records the amt drank and adds the amt to the running totalAmount, if confirm button in modal is clicked on
+        setTotalAmount(prev => {
+            const newTotal = prev + value;
+            console.log(`Updated ${label}, tot amt = ${newTotal.toFixed(1)} L ...`);
+            return newTotal;
+        });
+        console.log(`successfully recorded ${label}.`);
+        close();
+    }
+
     return (
         <Box style={{
             display:'flex',
             flexDirection:'column',
             justifyContent:'center'
         }}>
+            <Text ta="center" mb="sm">
+                {`Tot Amt: ${totalAmount.toFixed(1)} L`}
+            </Text>
             <Group justify="center">
                 {/* Background */}
                 <div
@@ -106,6 +133,21 @@ function VerticalSlider({ icon, label }:{ icon:string, label:SliderLabel}) {
             <Text ta="center" mt="sm">
                 {value.toFixed(1)} litres
             </Text>
+
+            <Button variant="default" onClick={handleRecord} >Record</Button>
+
+            <Modal opened={opened} onClose={close} title="Confirm Hydration Amount">
+                <Box style={{
+                    display:'flex',
+                    flexDirection:'column',
+                    alignItems:'center'
+                }}>
+                    <Text>
+                    {`You have drank ${value.toFixed(1)} litres of ${label}.`}
+                    </Text>
+                    <Button variant='default' mt={10} onClick={handleConfirm} >Confirm</Button>
+                </Box>
+            </Modal>
         </Box>
     )
 }
