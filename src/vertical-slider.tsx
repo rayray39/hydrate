@@ -14,9 +14,9 @@ const LABEL_DISTANCE_FROM_TOP = 36;
 function VerticalSlider({ icon, label }:{ icon:string, label:SliderLabel}) {
     const { fill, track, thumb } = sliderColors[label] ?? sliderColors.default;
 
-    const [value, setValue] = useState(1);
+    const [value, setValue] = useState(0.5);
     const sliderMin = 0;
-    const sliderMax = 5;
+    const sliderMax = 3;
     const sliderStep = 0.1;
     const noramlizedValue = (value - sliderMin) / (sliderMax - sliderMin);
 
