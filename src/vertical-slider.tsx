@@ -14,14 +14,14 @@ const LABEL_DISTANCE_FROM_TOP = 36;
 function VerticalSlider({ icon, label }:{ icon:string, label:SliderLabel}) {
     const { fill, track, thumb } = sliderColors[label] ?? sliderColors.default;
 
-    const [value, setValue] = useState(0.5);
+    const [value, setValue] = useState(0);
     const sliderMin = 0;
     const sliderMax = 3;
     const sliderStep = 0.1;
     const noramlizedValue = (value - sliderMin) / (sliderMax - sliderMin);
 
     const { ref } = useMove(({ y }) => {
-        // normalize the value to be withing the range [0,5], with step size = 0.1
+        // normalize the value to be withing the range [0,3], with step size = 0.1
         const normalized = 1 - y; // y=0 at top, invert it
         let scaled = sliderMin + normalized * (sliderMax - sliderMin);
 
@@ -39,6 +39,9 @@ function VerticalSlider({ icon, label }:{ icon:string, label:SliderLabel}) {
             flexDirection:'column',
             justifyContent:'center'
         }}>
+            <Text ta="center" mb="sm">
+                Tot Amt: X.X L
+            </Text>
             <Group justify="center">
                 {/* Background */}
                 <div
