@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Box, Group, Text } from '@mantine/core';
+import { useEffect, useState } from 'react';
+import { Box, Button, Group, Text } from '@mantine/core';
 import { useMove } from '@mantine/hooks';
 import { sliderColors } from './slider-colors';
 import type { SliderLabel } from './slider-labels';
@@ -14,11 +14,15 @@ const LABEL_DISTANCE_FROM_TOP = 36;
 function VerticalSlider({ icon, label }:{ icon:string, label:SliderLabel}) {
     const { fill, track, thumb } = sliderColors[label] ?? sliderColors.default;
 
-    const [value, setValue] = useState(0);
+    // tracks current slider value
+    const [value, setValue] = useState<number>(0);
     const sliderMin = 0;
     const sliderMax = 3;
     const sliderStep = 0.1;
     const noramlizedValue = (value - sliderMin) / (sliderMax - sliderMin);
+
+    // tracks accumulated amount
+    const [totalAmount, setTotalAmount] = useState<number>(0);
 
     const { ref } = useMove(({ y }) => {
         // normalize the value to be withing the range [0,3], with step size = 0.1
@@ -33,6 +37,16 @@ function VerticalSlider({ icon, label }:{ icon:string, label:SliderLabel}) {
         setValue(scaled);
     });
 
+    const handleRecord = () => {
+        // records the amt drank and adds the amt to the running totalAmount
+        console.log(`recording ${label}, amt = ${value.toFixed(1)} L ...`);
+        setTotalAmount(prev => {
+            const newTotal = prev + value;
+            console.log(`Updated ${label}, tot amt = ${newTotal.toFixed(1)} L ...`);
+            return newTotal;
+        });
+    }
+
     return (
         <Box style={{
             display:'flex',
@@ -40,7 +54,7 @@ function VerticalSlider({ icon, label }:{ icon:string, label:SliderLabel}) {
             justifyContent:'center'
         }}>
             <Text ta="center" mb="sm">
-                Tot Amt: X.X L
+                {`Tot Amt: ${totalAmount.toFixed(1)} L`}
             </Text>
             <Group justify="center">
                 {/* Background */}
@@ -109,6 +123,8 @@ function VerticalSlider({ icon, label }:{ icon:string, label:SliderLabel}) {
             <Text ta="center" mt="sm">
                 {value.toFixed(1)} litres
             </Text>
+
+            <Button variant="default" onClick={handleRecord} >Record</Button>
         </Box>
     )
 }
