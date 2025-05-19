@@ -20,7 +20,7 @@ const writeData = (data) => {
     fs.writeFileSync(dataPath, JSON.stringify(data, null, 2));
 };
 
-// Get all hydration logs
+// Get all hydration logs, for a specific drink (label) and for today only
 router.get('/', (req, res) => {
     const label = req.query.label;
     const date = req.query.date;
@@ -67,6 +67,16 @@ router.post('/', (req, res) => {
     writeData(data);
 
     return res.json({ message: `Added ${amount.toFixed(1)}L of ${label} to ${date}` });
+});
+
+// Get all hydration logs, everything in the database
+router.get('/all', (req, res) => {
+    const allData = readData();
+    if (!allData) {
+        return res.status(500).json({ message: 'Error in fetching all hydration data.' });
+    } else {
+        return res.status(200).json({ allData: allData, message: "Successfully fetched all hydration data." });
+    }
 });
 
 module.exports = router;
