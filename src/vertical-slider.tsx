@@ -98,6 +98,7 @@ function VerticalSlider({ icon, label }:{ icon:string, label:SliderLabel}) {
         });
         confirmHydrationRecordBackend();
         console.log(`successfully recorded ${label}.`);
+        setValue(0);
         close();
     }
 
