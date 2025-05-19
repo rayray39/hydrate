@@ -1,10 +1,14 @@
 import { Box, Button, Group, Space } from '@mantine/core';
 import VerticalSlider from './vertical-slider';
 import { getTodayDate } from './utils/getTodayDate'; 
+import { useNavigate } from 'react-router-dom';
 
 function Home() {
+    const navigate = useNavigate();
+
     const handleAnalyze = () => {
         console.log('analyze button clicked.');
+        navigate('/analyze');
     }
 
     return <>
