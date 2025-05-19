@@ -3,6 +3,7 @@ import { Box, Button, Group, Modal, Text } from '@mantine/core';
 import { useDisclosure, useMove } from '@mantine/hooks';
 import { sliderColors } from './slider-colors';
 import type { SliderLabel } from './slider-labels';
+import { getTodayDate } from './utils/getTodayDate';
 
 const SLIDER_WIDTH = 100;
 const SLIDER_HEIGHT = 360;
@@ -46,6 +47,27 @@ function VerticalSlider({ icon, label }:{ icon:string, label:SliderLabel}) {
         console.log(`recording ${label}, amt = ${value.toFixed(1)} L ...`);
     }
 
+    const confirmHydrationRecordBackend = async () => {
+        // makes a POST request to the server, to record the hydration data to database
+        const response = await fetch('http://localhost:5000/api/hydration', {
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body: JSON.stringify({
+                date: getTodayDate(),
+                label: label,
+                amount: value
+            })
+        })
+
+        if (!response.ok) {
+            console.log('Error in recording hydration data to database.');
+            return;
+        }
+
+        const data = await response.json();
+        console.log(data.message);
+    }
+
     const handleConfirm = () => {
         // records the amt drank and adds the amt to the running totalAmount, if confirm button in modal is clicked on
         setTotalAmount(prev => {
@@ -53,6 +75,7 @@ function VerticalSlider({ icon, label }:{ icon:string, label:SliderLabel}) {
             console.log(`Updated ${label}, tot amt = ${newTotal.toFixed(1)} L ...`);
             return newTotal;
         });
+        confirmHydrationRecordBackend();
         console.log(`successfully recorded ${label}.`);
         close();
     }
