@@ -1,8 +1,10 @@
-import { Box, Button } from "@mantine/core"
+import { BarChart } from "@mantine/charts";
+import { Box, Text } from "@mantine/core"
 import { useEffect, useState } from "react"
+import { sliderColors } from "./slider-colors";
 
 function Analyze() {
-    const [allHydrationData, setAllHydrationData] = useState([]);
+    const [allHydrationData, setAllHydrationData] = useState<{ date: string; water: number; coffee: number; tea: number }[]>([]);
 
     const fetchAllHydrationData = async () => {
         const response = await fetch('http://localhost:5000/api/hydration/all', {
@@ -17,6 +19,7 @@ function Analyze() {
 
         const data = await response.json();
         console.log(data.message)
+        console.log(data.allData);
         setAllHydrationData(data.allData);
     }
 
@@ -32,7 +35,26 @@ function Analyze() {
             alignItems:'center',
             height:'100vh',
         }}>
-            This is the analyze page
+            <Text>{'Analytics Page'}</Text>
+
+            <Box style={{
+                width:'60%',
+            }}>
+                <BarChart
+                    h={300}
+                    data={allHydrationData}
+                    dataKey="date"
+                    type="stacked"
+                    xAxisLabel="Date"
+                    yAxisLabel="Amount (L)"
+                    withLegend
+                    series={[
+                        { name: 'water', color: sliderColors['water']['fill'] },
+                        { name: 'coffee', color: sliderColors['coffee']['fill'] },
+                        { name: 'tea', color: sliderColors['tea']['fill'] },
+                    ]}
+                />
+            </Box>
         </Box>
     </>
 }
