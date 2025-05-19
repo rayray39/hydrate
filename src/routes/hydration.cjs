@@ -51,10 +51,11 @@ router.post('/', (req, res) => {
         data[date] = { water: 0, coffee: 0, tea: 0 };
     }
 
-    data[date][label] += amount;
+    // always round the total amount to 1dp
+    data[date][label] = Math.round((data[date][label] + amount) * 10) / 10;
     writeData(data);
 
-    return res.json({ message: `Added ${amount}L of ${label} to ${date}` });
+    return res.json({ message: `Added ${amount.toFixed(1)}L of ${label} to ${date}` });
 });
 
 module.exports = router;
