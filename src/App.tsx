@@ -2,19 +2,9 @@ import '@mantine/core/styles.css';
 import { Box, Button, Group, MantineProvider, Space } from '@mantine/core';
 import './App.css'
 import VerticalSlider from './vertical-slider';
+import { getTodayDate } from './utils/getTodayDate'; 
 
 function App() {
-
-    const getTodayDate = () => {
-        // returns today's date in dd/mm/yyyy
-        const today = new Date();
-        const dd = String(today.getDate()).padStart(2, '0');
-        const mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-        const yyyy = today.getFullYear();
-
-        const todayDate = `${dd}/${mm}/${yyyy}`;
-        return todayDate;
-    }
     
     const handleAnalyze = () => {
         console.log('analyze button clicked.');
