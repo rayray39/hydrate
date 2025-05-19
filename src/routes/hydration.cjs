@@ -37,7 +37,7 @@ router.post('/', (req, res) => {
     if (!allowedLabels.includes(label)) {
         return res.status(400).json({ message: 'Invalid label provided.' });
     }
-    if (typeof amount !== number || number < 0) {
+    if (typeof amount !== "number" || amount < 0) {
         return res.status(400).json({ message: 'Amount cannot be negative and must be a number.' });
     }
     if (!date || !label) {
