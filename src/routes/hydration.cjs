@@ -22,11 +22,22 @@ const writeData = (data) => {
 
 // Get all hydration logs
 router.get('/', (req, res) => {
-    const data = readData();
-    if (data) {
-        return res.status(200).json({ data: data, message: 'Successfully fetched all hydration data.' });
-    } else {
+    const label = req.query.label;
+    const date = req.query.date;
+    if (!label || !date) {
+        return res.status(400).json({ message: 'Missing label and/or date.' });
+    }
+
+    const allData = readData();
+    if (!allData) {
         return res.status(500).json({ message: 'Error in fetching all hydration data.' });
+    }
+
+    const todayData = allData[date][label];
+    if (todayData) {
+        return res.status(200).json({ todayData: todayData, message: "Successfully fetched today's hydration data." });
+    } else {
+        return res.status(500).json({ message: "Error in fetching today's hydration data." });
     }
 });
 

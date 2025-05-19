@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Box, Button, Group, Modal, Text } from '@mantine/core';
 import { useDisclosure, useMove } from '@mantine/hooks';
 import { sliderColors } from './slider-colors';
@@ -40,6 +40,27 @@ function VerticalSlider({ icon, label }:{ icon:string, label:SliderLabel}) {
         scaled = Math.max(sliderMin, Math.min(sliderMax, scaled));
         setValue(scaled);
     });
+
+    const fetchTodaysHydrationData = async () => {
+        // makes a GET request to the server to retrieve all hydration data from today
+        const response = await fetch(`http://localhost:5000/api/hydration?label=${label}&date=${getTodayDate()}`, {
+            method:'GET',
+            headers:{'Content-Type':'application/json'},
+        })
+
+        if (!response.ok) {
+            console.log("Error in fetching today's hydration data.");
+            return;
+        }
+
+        const data = await response.json();
+        setTotalAmount(data.todayData);
+        console.log(data.message);
+    }
+
+    useEffect(() => {
+        fetchTodaysHydrationData();
+    }, [])
 
     const handleRecord = () => {
         // opens the modal to ask user for amount drank confirmation
