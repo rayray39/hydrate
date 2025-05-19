@@ -75,7 +75,11 @@ router.get('/all', (req, res) => {
     if (!allData) {
         return res.status(500).json({ message: 'Error in fetching all hydration data.' });
     } else {
-        return res.status(200).json({ allData: allData, message: "Successfully fetched all hydration data." });
+        const reformatted = Object.entries(allData).map(([date, drinks]) => ({
+            date,
+            ...drinks
+        }));
+        return res.status(200).json({ allData: reformatted, message: "Successfully fetched all hydration data." });
     }
 });
 
