@@ -10,7 +10,7 @@ app.use(cors());
 app.use(express.json());
 
 // if the url endpoint starts with '/api/hydration', direct it to the hydrationRouter
-app.use('/api/drinks', hydrationRouter);
+app.use('/api/hydration', hydrationRouter);
 
 
 app.listen(PORT, () => {
