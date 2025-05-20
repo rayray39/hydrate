@@ -1,7 +1,6 @@
-import { BarChart } from "@mantine/charts";
 import { Box, Text } from "@mantine/core"
 import { useEffect, useState } from "react"
-import { sliderColors } from "./slider-colors";
+import HydrationBarChart from "./hydrationBarChart";
 
 function Analyze() {
     const [allHydrationData, setAllHydrationData] = useState<{ date: string; water: number; coffee: number; tea: number }[]>([]);
@@ -40,18 +39,7 @@ function Analyze() {
             <Box style={{
                 width:'60%',
             }}>
-                <BarChart
-                    h={300}
-                    data={allHydrationData}
-                    dataKey="date"
-                    xAxisLabel="Date"
-                    yAxisLabel="Amount (L)"
-                    series={[
-                        { name: 'water', color: sliderColors['water']['fill'] },
-                        { name: 'coffee', color: sliderColors['coffee']['fill'] },
-                        { name: 'tea', color: sliderColors['tea']['fill'] },
-                    ]}
-                />
+                <HydrationBarChart hydrationData={allHydrationData} />
             </Box>
         </Box>
     </>
