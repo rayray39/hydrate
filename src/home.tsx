@@ -45,16 +45,16 @@ function Home() {
             ].join('\n');
 
             // Step 2: Create blob and trigger download
-            const blob = new Blob([fileContent], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
+            const blob = new Blob([fileContent], { type: 'text/plain' });   // generates a in-memory file-like object
+            const url = URL.createObjectURL(blob);  // generates a temp URL
 
-            const a = document.createElement('a');
+            const a = document.createElement('a');  // creates a hidden anchor element to download from URL
             a.href = url;
             a.download = 'hydrate-log.txt';
-            document.body.appendChild(a);
+            document.body.appendChild(a);   // add to page's DOM temporarily
             a.click();
             document.body.removeChild(a);
-            URL.revokeObjectURL(url);
+            URL.revokeObjectURL(url);   // removes the file-like object from memory
         } catch (error) {
             console.log('Error saving data to .txt file, error: ', error);
         }
