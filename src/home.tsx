@@ -7,16 +7,19 @@ function Home() {
     const navigate = useNavigate();
 
     const handleAnalyze = () => {
+        // navigates to the analytics page, after analyze button is clicked on
         console.log('analyze button clicked.');
         navigate('/analyze');
     }
 
     const handleExport = () => {
+        // exports all the hydration data from the database and downloads it
         console.log('export button clicked.');
         fetchAllDataFromDatabase();
     }
 
     const fetchAllDataFromDatabase = async () => {
+        // fetches all data from database, writes them to a .txt file, and downloads it
         const response = await fetch('http://localhost:5000/api/hydration/all', {
             method:'GET',
             headers:{'Content-Type':'application/json'}
