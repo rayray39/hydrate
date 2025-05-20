@@ -44,10 +44,9 @@ function Analyze() {
                     h={300}
                     data={allHydrationData}
                     dataKey="date"
-                    type="stacked"
+                    // type="stacked"
                     xAxisLabel="Date"
                     yAxisLabel="Amount (L)"
-                    withLegend
                     series={[
                         { name: 'water', color: sliderColors['water']['fill'] },
                         { name: 'coffee', color: sliderColors['coffee']['fill'] },
