@@ -13,6 +13,50 @@ function Home() {
 
     const handleExport = () => {
         console.log('export button clicked.');
+        fetchAllDataFromDatabase();
+    }
+
+    const fetchAllDataFromDatabase = async () => {
+        const response = await fetch('http://localhost:5000/api/hydration/all', {
+            method:'GET',
+            headers:{'Content-Type':'application/json'}
+        })
+
+        if (!response.ok) {
+            console.log('Error in fetching all hydration data for export.');
+            return;
+        }
+
+        const data = await response.json();
+
+        try {
+            // Step 1: Build the text content
+            const headers = ['date', 'water', 'coffee', 'tea'];
+            const rowData = data.allData.map((entry: { date: string; water: number; coffee: number; tea: number; }) => {
+                return `${entry.date} | ${entry.water ?? 0} | ${entry.coffee ?? 0} | ${entry.tea ?? 0}`;
+            });
+
+            const fileContent = [
+                headers.join(' | '),     // header row
+                ...rowData               // data rows
+            ].join('\n');
+
+            // Step 2: Create blob and trigger download
+            const blob = new Blob([fileContent], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'hydrate-log.txt';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        } catch (error) {
+            console.log('Error saving data to .txt file, error: ', error);
+        }
+
+        console.log(data.message);
     }
 
     return <>
