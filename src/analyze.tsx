@@ -36,7 +36,7 @@ function Analyze() {
         }}>
             <Text>{'Analytics Page'}</Text>
 
-            <Box style={{
+            <Box mt={40} style={{
                 width:'60%',
             }}>
                 <HydrationBarChart hydrationData={allHydrationData} />
