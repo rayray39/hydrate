@@ -34,7 +34,7 @@ function Home() {
 
         try {
             // Step 1: Build the text content
-            const headers = ['date', 'water', 'coffee', 'tea'];
+            const headers = ['date', 'water (L)', 'coffee (L)', 'tea (L)'];
             const rowData = data.allData.map((entry: { date: string; water: number; coffee: number; tea: number; }) => {
                 return `${entry.date} | ${entry.water ?? 0} | ${entry.coffee ?? 0} | ${entry.tea ?? 0}`;
             });
