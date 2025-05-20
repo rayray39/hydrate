@@ -6,7 +6,7 @@ export const sliderColors = {
         thumb: 'var(--mantine-color-gray-7)',
     },
     water: {
-        fill: 'var(--mantine-color-blue-filled)',
+        fill: '#339af0',
         track: 'var(--mantine-color-blue-light)',
         thumb: 'var(--mantine-color-gray-7)',
     },
