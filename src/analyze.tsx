@@ -19,7 +19,7 @@ function Analyze() {
         const data = await response.json();
         console.log(data.message)
         console.log(data.allData);
-        setAllHydrationData(data.allData);
+        setAllHydrationData(data.allData.slice(-7));   // save only the past 7 days of data 
     }
 
     useEffect(() => {
