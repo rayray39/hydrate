@@ -44,7 +44,6 @@ function Analyze() {
                     h={300}
                     data={allHydrationData}
                     dataKey="date"
-                    // type="stacked"
                     xAxisLabel="Date"
                     yAxisLabel="Amount (L)"
                     series={[
