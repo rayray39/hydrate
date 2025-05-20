@@ -11,6 +11,10 @@ function Home() {
         navigate('/analyze');
     }
 
+    const handleExport = () => {
+        console.log('export button clicked.');
+    }
+
     return <>
         <Box style={{
             display:'flex',
@@ -48,6 +52,7 @@ function Home() {
 
             <Group style={{ marginTop: 40 }}>
                 <Button variant="default" size='md' onClick={handleAnalyze} >Analyze</Button>
+                <Button variant="default" size='md' onClick={handleExport} >Export</Button>
             </Group>
         </Box>
     </>
