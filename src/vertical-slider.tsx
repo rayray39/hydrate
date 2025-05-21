@@ -5,6 +5,22 @@ import { sliderColors } from './slider-colors';
 import type { SliderLabel } from './slider-labels';
 import { getTodayDate } from './utils/getTodayDate';
 
+// Initialize the  Supabase JS client
+import { createClient } from '@supabase/supabase-js'
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+const supabase = createClient(supabaseUrl, supabaseKey, 
+    {
+        global: {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            }
+        }
+    }
+);
+
+
 const SLIDER_WIDTH = 100;
 const SLIDER_HEIGHT = 360;
 const THUMB_HEIGHT = 8;
@@ -42,20 +58,30 @@ function VerticalSlider({ icon, label }:{ icon:string, label:SliderLabel}) {
     });
 
     const fetchTodaysHydrationData = async () => {
-        // makes a GET request to the server to retrieve all hydration data from today
-        const response = await fetch(`http://localhost:5000/api/hydration?label=${label}&date=${getTodayDate()}`, {
-            method:'GET',
-            headers:{'Content-Type':'application/json'},
-        })
+        // makes a GET request to Supabase to retrieve all hydration data, of this label, from today
+        const today = getTodayDate();
+        const { data, error } = await supabase
+            .from('hydration_logs')
+            .select('*')   // fetch only water column
+            .eq('date', today)
+            .maybeSingle()
 
-        if (!response.ok) {
-            console.log("Error in fetching today's hydration data.");
+        if (error) {
+            console.error('Supabase fetch error:', error);
+            return;
+        }
+        if (!data) {
+            console.log('No hydration data for today retrieved.');
             return;
         }
 
-        const data = await response.json();
-        setTotalAmount(data.todayData);
-        console.log(data.message);
+        console.log(data);
+
+        console.log('Supabase fetch successful.');
+
+        const typedData = data as Record<SliderLabel, number>;
+        setTotalAmount(typedData[label]);   // set label (water, coffee or tea)'s total amount
+        console.log("Successfully fetched today's hydration data.");
     }
 
     useEffect(() => {
@@ -69,24 +95,55 @@ function VerticalSlider({ icon, label }:{ icon:string, label:SliderLabel}) {
     }
 
     const confirmHydrationRecordBackend = async () => {
-        // makes a POST request to the server, to record the hydration data to database
-        const response = await fetch('http://localhost:5000/api/hydration', {
-            method:'POST',
-            headers:{'Content-Type':'application/json'},
-            body: JSON.stringify({
-                date: getTodayDate(),
-                label: label,
-                amount: value
-            })
-        })
+        // makes a POST request to Supabase, to record the hydration data to table
+        const today = getTodayDate();
 
-        if (!response.ok) {
-            console.log('Error in recording hydration data to database.');
+        const { data: existingRow, error } = await supabase
+            .from('hydration_logs')
+            .select('*')
+            .eq('date', today)
+            .maybeSingle();
+
+        if (error) {
+            console.error('Error fetching existing hydration entry:', error);
             return;
         }
 
-        const data = await response.json();
-        console.log(data.message);
+        if (existingRow) {
+            // existing row exists for today's date, perform an update on the hydration values
+            const currentValue = existingRow[label] ?? 0;
+            const updatedValue = currentValue + value;
+
+            const { error: updateError } = await supabase
+                .from('hydration_logs')
+                .update({ [label]: Math.round(updatedValue * 10) / 10 })
+                .eq('date', today);
+
+            if (updateError) {
+                console.error('Error updating hydration entry:', updateError);
+                return;
+            }
+            console.log('Successfully updated hydration entry.');
+        } else {
+            // row does not exists yet for today's date, perform an insertion
+            const newEntry = {
+                date: today,
+                water: label === 'water' ? value : 0,
+                coffee: label === 'coffee' ? value : 0,
+                tea: label === 'tea' ? value : 0,
+            };
+
+            const { error: insertError } = await supabase
+                .from('hydration_logs')
+                .insert([newEntry]);
+
+            if (insertError) {
+                console.error('Error inserting hydration entry:', insertError);
+                return;
+            }
+
+            console.log('Successfully inserted new hydration entry.');
+        }
     }
 
     const handleConfirm = () => {
