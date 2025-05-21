@@ -12,6 +12,7 @@
   "dependencies": {
     "@mantine/core": "^8.0.1",
     "@mantine/hooks": "^8.0.1",
+    "@supabase/supabase-js": "^2.49.7",
     "chart.js": "^4.4.9",
     "cors": "^2.8.5",
     "express": "^5.1.0",

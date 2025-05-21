@@ -2,24 +2,35 @@ import { Box, Text } from "@mantine/core"
 import { useEffect, useState } from "react"
 import HydrationBarChart from "./hydrationBarChart";
 
+// Initialize the  Supabase JS client
+import { createClient } from '@supabase/supabase-js'
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+const supabase = createClient(supabaseUrl, supabaseKey, 
+    {
+        global: {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            }
+        }
+    }
+);
+
 function Analyze() {
     const [allHydrationData, setAllHydrationData] = useState<{ date: string; water: number; coffee: number; tea: number }[]>([]);
 
     const fetchAllHydrationData = async () => {
-        const response = await fetch('http://localhost:5000/api/hydration/all', {
-            method:'GET',
-            headers:{'Content-Type':'application/json'}
-        })
+        const { data, error } = await supabase.from('hydration_logs').select('*')   // fetch all table data from supabase
 
-        if (!response.ok) {
-            console.log('Error in fetching hydration data for analytics.');
+        if (error || !data) {
+            console.error('Supabase fetch error:', error);
             return;
+        } else {
+            console.log('Supabase fetch successful.');
         }
-
-        const data = await response.json();
-        console.log(data.message)
-        console.log(data.allData);
-        setAllHydrationData(data.allData.slice(-7));   // save only the past 7 days of data 
+        setAllHydrationData(data.slice(-7));   // display only the past 7 days of data 
+        console.log('Successfully displayed hydration data in analyze page.');
     }
 
     useEffect(() => {

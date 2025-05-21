@@ -3,6 +3,22 @@ import VerticalSlider from './vertical-slider';
 import { getTodayDate } from './utils/getTodayDate'; 
 import { useNavigate } from 'react-router-dom';
 
+// Initialize the  Supabase JS client
+import { createClient } from '@supabase/supabase-js'
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+const supabase = createClient(supabaseUrl, supabaseKey, 
+    {
+        global: {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            }
+        }
+    }
+);
+
+
 function Home() {
     const navigate = useNavigate();
 
@@ -20,22 +36,20 @@ function Home() {
 
     const fetchAllDataFromDatabase = async () => {
         // fetches all data from database, writes them to a .txt file, and downloads it
-        const response = await fetch('http://localhost:5000/api/hydration/all', {
-            method:'GET',
-            headers:{'Content-Type':'application/json'}
-        })
+        const { data, error } = await supabase.from('hydration_logs').select('*')   // fetch all table data from supabase
 
-        if (!response.ok) {
-            console.log('Error in fetching all hydration data for export.');
+        if (error || !data) {
+            console.error('Supabase fetch error:', error);
             return;
+        } else {
+            console.log('Supabase fetch successful.');
         }
 
-        const data = await response.json();
-
+        // write to .txt file and formats it for download
         try {
             // Step 1: Build the text content
             const headers = ['date', 'water (L)', 'coffee (L)', 'tea (L)'];
-            const rowData = data.allData.map((entry: { date: string; water: number; coffee: number; tea: number; }) => {
+            const rowData = data.map((entry: { date: string; water: number; coffee: number; tea: number; }) => {
                 return `${entry.date} | ${entry.water ?? 0} | ${entry.coffee ?? 0} | ${entry.tea ?? 0}`;
             });
 
@@ -59,7 +73,7 @@ function Home() {
             console.log('Error saving data to .txt file, error: ', error);
         }
 
-        console.log(data.message);
+        console.log('Successfully exported all hydration data.');
     }
 
     return <>
