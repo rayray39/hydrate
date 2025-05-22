@@ -2,6 +2,7 @@
 import { Box, Button, Group, TextInput } from '@mantine/core';
 import { createClient } from '@supabase/supabase-js'
 import { useState, type SetStateAction } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
@@ -17,7 +18,9 @@ const supabase = createClient(supabaseUrl, supabaseKey,
 );
 
 function SignIn() {
+    const navigate = useNavigate();
     const [email, setEmail] = useState<string>('');
+    const [isEmailEntered, setIsEmailEntered] = useState<boolean>(false);
     const [otpToken, setOtpToken] = useState<string>('');
 
     const handleEmail = (event: { currentTarget: { value: SetStateAction<string>; }; }) => {
@@ -58,12 +61,19 @@ function SignIn() {
     const handleSignIn = () => {
         console.log(`email = ${email}`);
         console.log(`otp token = ${otpToken}`);
+
+        // clear fields after signing in
         setEmail('');
         setOtpToken('');
+        // disable sign in button
+        setIsEmailEntered(false);
+
+        navigate('/home');
     }
 
     const handleGetOtp = () => {
         console.log("sending OTP to user's email...");
+        setIsEmailEntered(true);
     }
 
     return <>
@@ -74,20 +84,26 @@ function SignIn() {
             alignItems:'center',
             height:'100vh',
         }}>
-            <Box style={{
+            <Box mb={40} style={{
                 fontWeight:'bold',
-                fontSize: 24,
+                fontSize: 32,
                 letterSpacing: 2
             }}>{"HYDRATE"}</Box>
 
-            <TextInput size='md' label='Email' placeholder='Enter your email here' value={email} onChange={handleEmail}/>
+            <Box>
+                <TextInput size='md' label='Email' placeholder='Enter your email here' value={email} onChange={handleEmail}/>
 
-            <TextInput size='md' label='OTP' placeholder='Enter the OTP here' value={otpToken} onChange={handleOtpToken}/>
+                <TextInput size='md' label='OTP' placeholder='Enter the OTP here' value={otpToken} onChange={handleOtpToken}/>
 
-            <Group style={{ marginTop: 40 }}>
-                <Button variant="default" size='md' onClick={handleGetOtp} >Get OTP</Button>
-                <Button variant="default" size='md' onClick={handleSignIn} >Sign In</Button>
-            </Group>
+                <Group style={{ 
+                    marginTop: 40,
+                    display:'flex',
+                    justifyContent:'center'
+                }}>
+                    <Button variant="default" size='md' onClick={handleGetOtp} disabled={email.length === 0} >Get OTP</Button>
+                    <Button variant="default" size='md' onClick={handleSignIn} disabled={isEmailEntered === false} >Sign In</Button>
+                </Group>
+            </Box>
         </Box>
     </>
 }
