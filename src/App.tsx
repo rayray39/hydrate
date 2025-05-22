@@ -4,6 +4,7 @@ import { MantineProvider } from '@mantine/core';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from './home';
 import Analyze from './analyze';
+import SignIn from './signIn';
 
 function App() {
 
@@ -15,7 +16,8 @@ function App() {
     >
         <BrowserRouter>
             <Routes>
-                <Route path="/" element={<Home />} />
+                <Route path="/home" element={<Home />} />
+                <Route path="/" element={<SignIn />} />
                 <Route path="/analyze" element={<Analyze />} />
             </Routes>
         </BrowserRouter>
