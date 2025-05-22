@@ -32,35 +32,29 @@ function SignIn() {
     }
 
     // send OTP to user's email
-    const sendOtp = async (email: string) => {
+    const sendOtp = async () => {
+        console.log("sending OTP to user's email...");
         const { error } = await supabase.auth.signInWithOtp({ email });
 
         if (error) {
             console.error('Error sending OTP:', error.message);
         } else {
             console.log('OTP sent to email.');
+            setIsEmailEntered(true);
         }
     };
 
     // verify the user's OTP
-    const verifyOtp = async (email: string, token: string) => {
+    const verifyOtp = async () => {
         // token refers to the OTP received by the user
-        const { data, error } = await supabase.auth.verifyOtp({
-            email,
-            token,
-            type: 'email', // use 'magiclink' if you go that route
-        });
-
-        if (error) {
-            console.error('OTP verification failed:', error.message);
-        } else {
-            console.log('OTP verification successful:', data.session);
-        }
-    };
-
-    const handleSignIn = () => {
         console.log(`email = ${email}`);
         console.log(`otp token = ${otpToken}`);
+
+        const { data, error } = await supabase.auth.verifyOtp({
+            email,
+            token: otpToken,
+            type: 'email', // use 'magiclink' if you go that route
+        });
 
         // clear fields after signing in
         setEmail('');
@@ -68,13 +62,13 @@ function SignIn() {
         // disable sign in button
         setIsEmailEntered(false);
 
-        navigate('/home');
-    }
-
-    const handleGetOtp = () => {
-        console.log("sending OTP to user's email...");
-        setIsEmailEntered(true);
-    }
+        if (error) {
+            console.error('OTP verification failed:', error.message);
+        } else {
+            console.log('OTP verification successful:', data.session);
+            navigate('/home');
+        }
+    };
 
     return <>
         <Box style={{
@@ -100,8 +94,8 @@ function SignIn() {
                     display:'flex',
                     justifyContent:'center'
                 }}>
-                    <Button variant="default" size='md' onClick={handleGetOtp} disabled={email.length === 0} >Get OTP</Button>
-                    <Button variant="default" size='md' onClick={handleSignIn} disabled={isEmailEntered === false} >Sign In</Button>
+                    <Button variant="default" size='md' onClick={sendOtp} disabled={email.length === 0} >Get OTP</Button>
+                    <Button variant="default" size='md' onClick={verifyOtp} disabled={isEmailEntered === false} >Sign In</Button>
                 </Group>
             </Box>
         </Box>
