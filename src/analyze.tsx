@@ -43,7 +43,7 @@ function Analyze() {
     const handleBack = () => {
         // navigates back to home page
         console.log('going back to home page...');
-        navigate('/');
+        navigate('/home');
     }
 
     return <>
