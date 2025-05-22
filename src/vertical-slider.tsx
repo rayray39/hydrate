@@ -75,8 +75,6 @@ function VerticalSlider({ icon, label }:{ icon:string, label:SliderLabel}) {
             return;
         }
 
-        console.log(data);
-
         console.log('Supabase fetch successful.');
 
         const typedData = data as Record<SliderLabel, number>;

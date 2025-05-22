@@ -1,9 +1,10 @@
-import { Box, Text } from "@mantine/core"
+import { Box, Button, Text } from "@mantine/core"
 import { useEffect, useState } from "react"
 import HydrationBarChart from "./hydrationBarChart";
 
 // Initialize the  Supabase JS client
 import { createClient } from '@supabase/supabase-js'
+import { useNavigate } from "react-router-dom";
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey, 
@@ -18,6 +19,8 @@ const supabase = createClient(supabaseUrl, supabaseKey,
 );
 
 function Analyze() {
+    const navigate = useNavigate();
+
     const [allHydrationData, setAllHydrationData] = useState<{ date: string; water: number; coffee: number; tea: number }[]>([]);
 
     const fetchAllHydrationData = async () => {
@@ -37,6 +40,12 @@ function Analyze() {
         fetchAllHydrationData();
     }, [])
 
+    const handleBack = () => {
+        // navigates back to home page
+        console.log('going back to home page...');
+        navigate('/');
+    }
+
     return <>
         <Box style={{
             display:'flex',
@@ -47,11 +56,13 @@ function Analyze() {
         }}>
             <Text>{'Analytics Page'}</Text>
 
-            <Box mt={40} style={{
+            <Box mt={40} mb={40} style={{
                 width:'60%',
             }}>
                 <HydrationBarChart hydrationData={allHydrationData} />
             </Box>
+
+            <Button variant="default" size="md" onClick={handleBack}>Back</Button>
         </Box>
     </>
 }
