@@ -20,7 +20,6 @@ const supabase = createClient(supabaseUrl, supabaseKey,
 function SignIn() {
     const navigate = useNavigate();
     const [email, setEmail] = useState<string>('');
-    const [isEmailEntered, setIsEmailEntered] = useState<boolean>(false);
     const [otpToken, setOtpToken] = useState<string>('');
 
     const handleEmail = (event: { currentTarget: { value: SetStateAction<string>; }; }) => {
@@ -35,12 +34,11 @@ function SignIn() {
     const sendOtp = async () => {
         console.log("sending OTP to user's email...");
         const { error } = await supabase.auth.signInWithOtp({ email });
-
+        
         if (error) {
             console.error('Error sending OTP:', error.message);
         } else {
             console.log('OTP sent to email.');
-            setIsEmailEntered(true);
         }
     };
 
@@ -59,8 +57,6 @@ function SignIn() {
         // clear fields after signing in
         setEmail('');
         setOtpToken('');
-        // disable sign in button
-        setIsEmailEntered(false);
 
         if (error) {
             console.error('OTP verification failed:', error.message);
@@ -95,7 +91,7 @@ function SignIn() {
                     justifyContent:'center'
                 }}>
                     <Button variant="default" size='md' onClick={sendOtp} disabled={email.length === 0} >Get OTP</Button>
-                    <Button variant="default" size='md' onClick={verifyOtp} disabled={isEmailEntered === false} >Sign In</Button>
+                    <Button variant="default" size='md' onClick={verifyOtp} disabled={email.length === 0 || otpToken.length === 0} >Sign In</Button>
                 </Group>
             </Box>
         </Box>
