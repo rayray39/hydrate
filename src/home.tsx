@@ -76,6 +76,10 @@ function Home() {
         console.log('Successfully exported all hydration data.');
     }
 
+    const handleLogout = () => {
+        console.log('logging user out...');
+    }
+
     return <>
         <Box style={{
             display:'flex',
@@ -114,6 +118,7 @@ function Home() {
             <Group style={{ marginTop: 40 }}>
                 <Button variant="default" size='md' onClick={handleAnalyze} >Analyze</Button>
                 <Button variant="default" size='md' onClick={handleExport} >Export</Button>
+                <Button variant="default" size='md' onClick={handleLogout} >Log Out</Button>
             </Group>
         </Box>
     </>
