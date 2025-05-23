@@ -76,8 +76,18 @@ function Home() {
         console.log('Successfully exported all hydration data.');
     }
 
-    const handleLogout = () => {
+    const handleLogout = async () => {
+        // log the user our after clicking on logout button
         console.log('logging user out...');
+
+        const { error } = await supabase.auth.signOut();
+
+        if (error) {
+            console.error('Error signing out:', error.message);
+        } else {
+            console.log('User signed out successfully');
+            navigate('/');  // redirect back to sign in page
+        }
     }
 
     return <>
