@@ -5,6 +5,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from './home';
 import Analyze from './analyze';
 import SignIn from './signIn';
+import ProtectedRoute from './protectedRoute';
 
 function App() {
 
@@ -16,9 +17,16 @@ function App() {
     >
         <BrowserRouter>
             <Routes>
-                <Route path="/home" element={<Home />} />
-                <Route path="/" element={<SignIn />} />
-                <Route path="/analyze" element={<Analyze />} />
+                {/* Public Routes */}
+                <Route path='/' element={<SignIn />} />
+
+                {/* Protected Routes, require authentication */}
+                <Route path="/home" element={
+                    <ProtectedRoute child={<Home />} />
+                } />
+                <Route path="/analyze" element={
+                    <ProtectedRoute child={<Analyze />} />
+                } />
             </Routes>
         </BrowserRouter>
     </MantineProvider>
