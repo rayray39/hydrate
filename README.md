@@ -1,54 +1,45 @@
-# React + TypeScript + Vite
+# Description  
+Track and analyze your daily hydration levels across your favorite drinks — including water, coffee, and tea — with ease and precision using **Hydrate**.  
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Visit Hydrate [here](https://hydrate-me.vercel.app)
 
-Currently, two official plugins are available:
+This hydration tracker lets users log their fluid intake, visualize their consumption patterns, and maintain healthier habits. Built with a clean, responsive UI and secure user authentication, each user gets a personalized experience with private hydration logs.  
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## How It Works
 
-## Expanding the ESLint configuration
+Record daily hydration levels for any of the default beverages (water, coffee and tea), using the vertical sliders. The dynamic and responsive UI will update the total amount, in litres, of the beverage drank. The database will also be updated to allow users to seamlessly fetch their hydration logs daily. Use the export feature to download the hydration logs as a .txt file.  
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+<p align='center'>
+    <img src='./src/assets/hydrate-home-2.png' width='40%' >  
+</p>
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+<br>
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Use the analytics page to look at hydration logs and visualize consumption patterns for the past 7 days. 
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+<p align='center'>
+    <img src='./src/assets/hydrate-analyze.png' width='50%' >  
+</p>
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+<br>
+
+# Features  
+- 🔐 **Secure Authentication** via passwordless email OTP using **Supabase Auth**
+- 🧾 Individual Hydration Logs with **Supabase Postgres Database**
+- ☁️ **Cloud-based Storage & API** using **Supabase** as the backend-as-a-service (BaaS)
+- 🥤 Multi-beverage Tracking (water, coffee, tea) using a dynamic **React + TypeScript** frontend
+- 📈 Visual Feedback & Tracking UI built using **Mantine UI** components and **ChartJS** for a clean, responsive experience
+- 💬 **Express.js** Backend Integration (optional/custom APIs) for extensibility
+- 🚀 **Deployed on Vercel** for seamless, fast, and free hosting with continuous deployment from GitHub
+
+# Tech Stack  
+This section highlights the tech stack used for this project.  
+
+[![Tech Stack](https://skillicons.dev/icons?i=react,ts,supabase,express,postgres,vercel&theme=dark)](https://skillicons.dev)
+
+# Future Work  
+This section highlights some of the new features that may be implemented in future releases.  
+
+- Dynamic addition of new beverages other than the default ones (water, coffee, tea).
+- Dynamic deletion of current beverages on the home page.
+- Customization of vertical sliders (bgcolor, fill color, etc.) for beverages.
