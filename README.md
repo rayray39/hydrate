@@ -10,7 +10,7 @@ This hydration tracker lets users log their fluid intake, visualize their consum
 Record daily hydration levels for any of the default beverages (water, coffee and tea), using the vertical sliders. The dynamic and responsive UI will update the total amount, in litres, of the beverage drank. The database will also be updated to allow users to seamlessly fetch their hydration logs daily. Use the export feature to download the hydration logs as a .txt file.  
 
 <p align='center'>
-    <img src='./src/assets/hydrate-home-2.png' width='40%' >  
+    <img src='./src/assets/hydrate-home-2.png' width='60%' >  
 </p>
 
 <br>
@@ -18,7 +18,7 @@ Record daily hydration levels for any of the default beverages (water, coffee an
 Use the analytics page to look at hydration logs and visualize consumption patterns for the past 7 days. 
 
 <p align='center'>
-    <img src='./src/assets/hydrate-analyze.png' width='50%' >  
+    <img src='./src/assets/hydrate-analyze.png' width='70%' >  
 </p>
 
 <br>
