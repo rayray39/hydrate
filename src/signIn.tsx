@@ -1,5 +1,5 @@
 // Initialize the  Supabase JS client
-import { Box, Button, Group, Popover, Text, TextInput } from '@mantine/core';
+import { Alert, Box, Button, Group, Popover, Text, TextInput } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { createClient } from '@supabase/supabase-js'
 import { useState, type SetStateAction } from 'react';
@@ -30,6 +30,12 @@ function SignIn() {
     // controls the state of the popover when get OTP button is clicked
     const [popoverOpened, {open, close}] = useDisclosure(false);
 
+    // opens the alert when OTP sending error occurs
+    const [otpSendError, setOtpSendError] = useState<boolean>(false);
+
+    // opens the alert when the OTP verification error occurs
+    const [otpVerifyError, setOtpVerifyError] = useState<boolean>(false);
+
     const handleEmail = (event: { currentTarget: { value: SetStateAction<string>; }; }) => {
         setEmail(event.currentTarget.value);
     }
@@ -38,15 +44,30 @@ function SignIn() {
         setOtpToken(event.currentTarget.value);
     }
 
+    // returns true if the email contains both '@' and '.com'
+    const isValidEmail = (email: string): boolean => {
+        const regex = /^[^\s@]+@[^\s@]+\.com$/;
+        return regex.test(email);
+    };
+
     // send OTP to user's email
     const sendOtp = async () => {
+        if (!isValidEmail(email)) {
+            // check for valid email
+            console.log('Error sending OTP: invalid email.');
+            setOtpSendError(true);
+            return;
+        }
+
         console.log("sending OTP to user's email...");
         const { error } = await supabase.auth.signInWithOtp({ email });
         
         if (error) {
             console.error('Error sending OTP:', error.message);
+            setOtpSendError(true);
         } else {
             console.log('OTP sent to email.');
+            setOtpSendError(false);
             open(); // open the popover to ask user to check email
         }
     };
@@ -56,6 +77,19 @@ function SignIn() {
         // token refers to the OTP received by the user
         console.log(`email = ${email}`);
         console.log(`otp token = ${otpToken}`);
+
+        if (otpToken.length !== 6) {
+            // check for valid OTP
+            console.log('OTP verification failed: OTP not equal to 6 digits.')
+            setOtpVerifyError(true);
+            return;
+        }
+        if (!isValidEmail(email)) {
+            // check for valid email
+            console.log('Error sending OTP: invalid email.');
+            setOtpSendError(true);
+            return;
+        }
 
         const { data, error } = await supabase.auth.verifyOtp({
             email,
@@ -69,8 +103,10 @@ function SignIn() {
 
         if (error) {
             console.error('OTP verification failed:', error.message);
+            setOtpVerifyError(true);
         } else {
             console.log('OTP verification successful:', data.session);
+            setOtpVerifyError(false);
             navigate('/home');
         }
     };
@@ -88,6 +124,22 @@ function SignIn() {
                 fontSize: 32,
                 letterSpacing: 2
             }}>{"HYDRATE"}</Box>
+
+            <Box>
+                {
+                    otpSendError &&
+                    <Alert variant="light" color="red" withCloseButton onClose={() => setOtpSendError(false)} title="OTP Sending Error" >
+                        Error in sending OTP to email, ensure email is valid.
+                    </Alert>
+                }
+
+                {
+                    otpVerifyError &&
+                    <Alert variant="light" color="red" withCloseButton onClose={() => setOtpVerifyError(false)} title="OTP Verification Error" >
+                        Error in verifying OTP, ensure OTP is valid.
+                    </Alert>
+                }
+            </Box>
 
             <Box>
                 <TextInput size='md' label='Email' placeholder='Enter your email here' value={email} onChange={handleEmail}/>
