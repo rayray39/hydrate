@@ -1,5 +1,6 @@
 // Initialize the  Supabase JS client
 import { Box, Button, Group, Popover, Text, TextInput } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
 import { createClient } from '@supabase/supabase-js'
 import { useState, type SetStateAction } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -26,6 +27,9 @@ function SignIn() {
     // otp entered by user
     const [otpToken, setOtpToken] = useState<string>('');
 
+    // controls the state of the popover when get OTP button is clicked
+    const [popoverOpened, {open, close}] = useDisclosure(false);
+
     const handleEmail = (event: { currentTarget: { value: SetStateAction<string>; }; }) => {
         setEmail(event.currentTarget.value);
     }
@@ -43,6 +47,7 @@ function SignIn() {
             console.error('Error sending OTP:', error.message);
         } else {
             console.log('OTP sent to email.');
+            open(); // open the popover to ask user to check email
         }
     };
 
@@ -95,7 +100,7 @@ function SignIn() {
                     justifyContent:'center'
                 }}>
 
-                    <Popover width={160} position="bottom" withArrow shadow="md">
+                    <Popover opened={popoverOpened} onClose={close} width={160} position="bottom" withArrow shadow="md">
                         <Popover.Target>
                             <Button variant="default" size='md' onClick={sendOtp} disabled={email.length === 0} >Get OTP</Button>
                         </Popover.Target>
