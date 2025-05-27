@@ -1,5 +1,5 @@
 // Initialize the  Supabase JS client
-import { Box, Button, Group, TextInput } from '@mantine/core';
+import { Box, Button, Group, Popover, Text, TextInput } from '@mantine/core';
 import { createClient } from '@supabase/supabase-js'
 import { useState, type SetStateAction } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -19,7 +19,11 @@ const supabase = createClient(supabaseUrl, supabaseKey,
 
 function SignIn() {
     const navigate = useNavigate();
+
+    // email entered by user
     const [email, setEmail] = useState<string>('');
+
+    // otp entered by user
     const [otpToken, setOtpToken] = useState<string>('');
 
     const handleEmail = (event: { currentTarget: { value: SetStateAction<string>; }; }) => {
@@ -90,7 +94,16 @@ function SignIn() {
                     display:'flex',
                     justifyContent:'center'
                 }}>
-                    <Button variant="default" size='md' onClick={sendOtp} disabled={email.length === 0} >Get OTP</Button>
+
+                    <Popover width={160} position="bottom" withArrow shadow="md">
+                        <Popover.Target>
+                            <Button variant="default" size='md' onClick={sendOtp} disabled={email.length === 0} >Get OTP</Button>
+                        </Popover.Target>
+                        <Popover.Dropdown>
+                            <Text size="xs" style={{ textAlign:'center' }}>Check your email for the OTP.</Text>
+                        </Popover.Dropdown>
+                    </Popover>
+
                     <Button variant="default" size='md' onClick={verifyOtp} disabled={email.length === 0 || otpToken.length === 0} >Sign In</Button>
                 </Group>
             </Box>
